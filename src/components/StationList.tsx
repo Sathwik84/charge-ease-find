@@ -1,4 +1,3 @@
-
 import { MapPin, Zap, Wifi, Coffee, Car, Clock, IndianRupee } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,9 +21,10 @@ interface StationListProps {
   stations: Station[];
   selectedStation: Station | null;
   onStationSelect: (station: Station | null) => void;
+  onBookSlot?: (station: Station) => void;
 }
 
-const StationList = ({ stations, selectedStation, onStationSelect }: StationListProps) => {
+const StationList = ({ stations, selectedStation, onStationSelect, onBookSlot }: StationListProps) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'available': return 'bg-green-100 text-green-800 border-green-200';
@@ -57,7 +57,7 @@ const StationList = ({ stations, selectedStation, onStationSelect }: StationList
 
   if (stations.length === 0) {
     return (
-      <Card className="p-8 text-center">
+      <Card className="p-8 text-center bg-gradient-to-br from-white to-gray-50 shadow-lg border-0">
         <div className="text-gray-400 mb-4">
           <MapPin className="w-12 h-12 mx-auto" />
         </div>
@@ -72,9 +72,9 @@ const StationList = ({ stations, selectedStation, onStationSelect }: StationList
       {stations.map((station) => (
         <Card 
           key={station.id} 
-          className={`cursor-pointer transition-all hover:shadow-md ${
+          className={`cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-gradient-to-br from-white to-gray-50 border-0 shadow-md ${
             selectedStation?.id === station.id 
-              ? 'ring-2 ring-primary shadow-lg' 
+              ? 'ring-2 ring-blue-400 shadow-2xl scale-105' 
               : 'hover:ring-1 hover:ring-gray-200'
           }`}
           onClick={() => onStationSelect(selectedStation?.id === station.id ? null : station)}
@@ -82,31 +82,33 @@ const StationList = ({ stations, selectedStation, onStationSelect }: StationList
           <CardHeader className="pb-3">
             <div className="flex justify-between items-start">
               <div className="flex-1">
-                <CardTitle className="text-lg mb-1">{station.name}</CardTitle>
+                <CardTitle className="text-lg mb-1 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                  {station.name}
+                </CardTitle>
                 <div className="flex items-center text-sm text-gray-600 mb-2">
-                  <MapPin className="w-4 h-4 mr-1" />
+                  <MapPin className="w-4 h-4 mr-1 text-blue-500" />
                   {station.distance} km away
                 </div>
                 <p className="text-sm text-gray-600">{station.address}</p>
               </div>
-              <Badge className={`${getStatusColor(station.status)} font-medium`}>
+              <Badge className={`${getStatusColor(station.status)} font-medium shadow-sm`}>
                 {getStatusText(station.status)}
               </Badge>
             </div>
           </CardHeader>
           
           <CardContent className="space-y-4">
-            {/* Availability and Pricing */}
+            {/* Availability and Pricing with enhanced styling */}
             <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="text-gray-500">Available:</span>
-                <div className="font-medium">
+              <div className="bg-blue-50 rounded-lg p-3">
+                <span className="text-blue-600 font-medium">Available:</span>
+                <div className="font-bold text-blue-800">
                   {station.availableChargers}/{station.totalChargers} chargers
                 </div>
               </div>
-              <div>
-                <span className="text-gray-500">Price:</span>
-                <div className="font-medium text-primary flex items-center">
+              <div className="bg-green-50 rounded-lg p-3">
+                <span className="text-green-600 font-medium">Price:</span>
+                <div className="font-bold text-green-800 flex items-center">
                   <IndianRupee className="w-3 h-3 mr-1" />
                   {station.pricePerKwh}/kWh
                 </div>
@@ -141,15 +143,37 @@ const StationList = ({ stations, selectedStation, onStationSelect }: StationList
               </div>
             )}
 
-            {/* Actions */}
+            {/* Enhanced Actions */}
             <div className="flex space-x-2 pt-2">
-              <Button size="sm" className="flex-1 bg-primary hover:bg-primary/90">
+              <Button 
+                size="sm" 
+                className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all"
+              >
                 <MapPin className="w-4 h-4 mr-2" />
                 Directions
               </Button>
-              <Button size="sm" variant="outline" className="flex-1">
-                Details
-              </Button>
+              {onBookSlot && station.availableChargers > 0 && (
+                <Button 
+                  size="sm" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onBookSlot(station);
+                  }}
+                  className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-md hover:shadow-lg transition-all"
+                >
+                  <Zap className="w-4 h-4 mr-2" />
+                  Book Slot
+                </Button>
+              )}
+              {(!onBookSlot || station.availableChargers === 0) && (
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="flex-1 hover:bg-gray-50 transition-all"
+                >
+                  Details
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
