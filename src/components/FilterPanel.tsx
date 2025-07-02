@@ -21,7 +21,8 @@ interface FilterPanelProps {
 }
 
 const FilterPanel = ({ filters, setFilters }: FilterPanelProps) => {
-  const chargerTypes = ['Tesla', 'CCS', 'CHAdeMO', 'Type 2'];
+  // Indian EV charger types
+  const chargerTypes = ['CCS2', 'CHAdeMO', 'Type 2 AC', 'Bharat AC001', 'Bharat DC001', '15A Socket'];
   const availabilityOptions = [
     { value: 'all', label: 'All Stations' },
     { value: 'available', label: 'Available Now' },
@@ -34,6 +35,7 @@ const FilterPanel = ({ filters, setFilters }: FilterPanelProps) => {
     { value: 'Shopping', label: 'Shopping', icon: Car },
     { value: 'Parking', label: 'Parking', icon: Car },
     { value: 'Coffee', label: 'Coffee', icon: Coffee },
+    { value: 'ATM', label: 'ATM', icon: Clock },
   ];
 
   const handleAmenityChange = (amenity: string, checked: boolean) => {
@@ -49,7 +51,7 @@ const FilterPanel = ({ filters, setFilters }: FilterPanelProps) => {
       chargerType: 'all',
       availability: 'all',
       amenities: [],
-      maxDistance: 10
+      maxDistance: 20
     });
   };
 
@@ -57,7 +59,7 @@ const FilterPanel = ({ filters, setFilters }: FilterPanelProps) => {
     filters.chargerType !== 'all',
     filters.availability !== 'all',
     filters.amenities.length > 0,
-    filters.maxDistance !== 10
+    filters.maxDistance !== 20
   ].filter(Boolean).length;
 
   return (
@@ -85,7 +87,7 @@ const FilterPanel = ({ filters, setFilters }: FilterPanelProps) => {
       <CardContent className="space-y-6">
         {/* Charger Type Filter */}
         <div className="space-y-2">
-          <Label className="text-sm font-medium">Charger Type</Label>
+          <Label className="text-sm font-medium">Charger Type (Indian Standards)</Label>
           <Select 
             value={filters.chargerType} 
             onValueChange={(value) => setFilters({ ...filters, chargerType: value })}
@@ -130,7 +132,7 @@ const FilterPanel = ({ filters, setFilters }: FilterPanelProps) => {
         {/* Distance Filter */}
         <div className="space-y-3">
           <Label className="text-sm font-medium">
-            Max Distance: {filters.maxDistance} miles
+            Max Distance: {filters.maxDistance} km
           </Label>
           <Slider
             value={[filters.maxDistance]}
@@ -141,8 +143,8 @@ const FilterPanel = ({ filters, setFilters }: FilterPanelProps) => {
             className="w-full"
           />
           <div className="flex justify-between text-xs text-gray-500">
-            <span>1 mile</span>
-            <span>50 miles</span>
+            <span>1 km</span>
+            <span>50 km</span>
           </div>
         </div>
 

@@ -1,5 +1,5 @@
 
-import { MapPin, Zap, Wifi, Coffee, Car, Clock } from 'lucide-react';
+import { MapPin, Zap, Wifi, Coffee, Car, Clock, IndianRupee } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -50,6 +50,7 @@ const StationList = ({ stations, selectedStation, onStationSelect }: StationList
       case 'restaurant': return <Coffee className="w-3 h-3" />;
       case 'parking': return <Car className="w-3 h-3" />;
       case 'shopping': return <Car className="w-3 h-3" />;
+      case 'atm': return <IndianRupee className="w-3 h-3" />;
       default: return <Clock className="w-3 h-3" />;
     }
   };
@@ -84,7 +85,7 @@ const StationList = ({ stations, selectedStation, onStationSelect }: StationList
                 <CardTitle className="text-lg mb-1">{station.name}</CardTitle>
                 <div className="flex items-center text-sm text-gray-600 mb-2">
                   <MapPin className="w-4 h-4 mr-1" />
-                  {station.distance} miles away
+                  {station.distance} km away
                 </div>
                 <p className="text-sm text-gray-600">{station.address}</p>
               </div>
@@ -105,8 +106,9 @@ const StationList = ({ stations, selectedStation, onStationSelect }: StationList
               </div>
               <div>
                 <span className="text-gray-500">Price:</span>
-                <div className="font-medium text-primary">
-                  ${station.pricePerKwh}/kWh
+                <div className="font-medium text-primary flex items-center">
+                  <IndianRupee className="w-3 h-3 mr-1" />
+                  {station.pricePerKwh}/kWh
                 </div>
               </div>
             </div>

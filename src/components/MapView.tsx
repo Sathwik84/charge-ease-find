@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from 'react';
-import { MapPin, Navigation } from 'lucide-react';
+import { MapPin, Navigation, IndianRupee } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -63,7 +63,7 @@ const MapView = ({ stations, selectedStation, onStationSelect }: MapViewProps) =
             <Navigation className="w-4 h-4" />
           </Button>
           <div className="bg-white rounded-lg shadow-md p-2 text-sm">
-            <div className="text-center font-medium">Zoom: 12</div>
+            <div className="text-center font-medium">Hyderabad</div>
           </div>
         </div>
 
@@ -75,8 +75,8 @@ const MapView = ({ stations, selectedStation, onStationSelect }: MapViewProps) =
               selectedStation?.id === station.id ? 'scale-125 z-20' : 'z-10'
             }`}
             style={{
-              left: `${30 + index * 15}%`,
-              top: `${40 + index * 10}%`,
+              left: `${25 + index * 12}%`,
+              top: `${35 + index * 8}%`,
             }}
             onClick={() => onStationSelect(selectedStation?.id === station.id ? null : station)}
           >
@@ -100,7 +100,7 @@ const MapView = ({ stations, selectedStation, onStationSelect }: MapViewProps) =
                   <CardContent className="space-y-3">
                     <div className="flex justify-between text-sm">
                       <span>Distance:</span>
-                      <span className="font-medium">{station.distance} miles</span>
+                      <span className="font-medium">{station.distance} km</span>
                     </div>
                     
                     <div className="flex justify-between text-sm">
@@ -110,7 +110,10 @@ const MapView = ({ stations, selectedStation, onStationSelect }: MapViewProps) =
                     
                     <div className="flex justify-between text-sm">
                       <span>Price:</span>
-                      <span className="font-medium">${station.pricePerKwh}/kWh</span>
+                      <span className="font-medium flex items-center">
+                        <IndianRupee className="w-3 h-3 mr-1" />
+                        {station.pricePerKwh}/kWh
+                      </span>
                     </div>
                     
                     <div className="space-y-2">
@@ -143,7 +146,7 @@ const MapView = ({ stations, selectedStation, onStationSelect }: MapViewProps) =
 
         {/* Map Attribution */}
         <div className="absolute bottom-2 left-2 text-xs text-gray-500 bg-white px-2 py-1 rounded">
-          Mock Map View - Real integration available with Supabase
+          Hyderabad EV Charging Map - Indian Standards Supported
         </div>
       </div>
     </div>
